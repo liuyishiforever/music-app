@@ -17,6 +17,16 @@ npm run build
 # build for production and view the bundle analyzer report
 npm run build --report
 ```
+## Technology stack
+1. Vuejs - The Progressive JavaScript Framework
+2. axios - Promise based HTTP client for the browser and node.js
+3. Vuex - Vuex is a state management pattern + library for Vue.js applications. 
+4. scss - Syntactically Awesome Style Sheets
+5. flexible - Alibaba Mobile adaptation scheme
+6. px2remLoader - Change 'px' to 'rem'
+7. better-scroll - It's a plugin which is aimed at solving scrolling circumstances on the mobile side
+8. Vue-Lazyload: Vue module for lazyloading images in applications
+
 ## 项目预览
 ![imJaDK.gif](https://s1.ax1x.com/2018/09/20/imJaDK.gif)
 
