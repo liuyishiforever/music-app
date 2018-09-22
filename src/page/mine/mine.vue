@@ -117,34 +117,48 @@
           click: true
         })
       }, 20)
-
     },
+    watch: {
+      isLogin(val, oldVal) {
+        if (val) {
+          this._initData();
+        }
+        this.scroll.refresh();
+      }
+    },
+
     created() {
       if (this.account) {
+        this._initData();
+      }
+
+    },
+    computed: {
+      createdPlayShow() {
+        return !this.createdPlayFold;
+      },
+      subPlaylistShow() {
+        return !this.subPlaylistFold;
+      },
+      ...mapGetters([
+        'isLogin',
+        'profile',
+        'account'
+      ])
+
+
+    },
+    methods: {
+
+      _initData() {
         let userId = this.account.id;
         let url = `http://localhost:3000/user/playlist?uid=${userId}`;
         this.$axios.get(url).then((res) => {
           let list = res.data.playlist;
           this._normalizeData(list, userId);
         })
-      }
-    },
-    computed: {
-      ...mapGetters([
-        'isLogin',
-        'account',
-        'profile'
-      ]),
-
-      createdPlayShow() {
-        return !this.createdPlayFold;
       },
-      subPlaylistShow() {
-        return !this.subPlaylistFold;
-      }
 
-    },
-    methods: {
 
       toggle1() {
         if (!this.createdPlaylist.length) {
@@ -165,7 +179,6 @@
           path: '/login'
         })
       },
-
       _normalizeData(list, userid) {
         for (let i = 0; i < list.length; i++) {
           let item = list[i];
@@ -175,7 +188,8 @@
             this.subPlaylist.push(item);
           }
         }
-      }
+      },
+
     }
 
   }
