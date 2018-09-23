@@ -6,10 +6,9 @@
 
 <script>
   import {mapGetters} from 'vuex';
-  import musicList from '../../components/music-list/music-list'
+  import musicList from '../../../components/music-list/music-list'
 
   export default {
-    name: "list-detail",
     data() {
       return {
         songs: {},
@@ -22,7 +21,7 @@
     methods: {
       _getSongList() {
         if (!this.songList || !this.songList.id) {
-          this.$router.push('/recommend');
+          this.$router.push('/mine');
           return;
         }
         this.songs = this.songList;

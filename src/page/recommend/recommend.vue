@@ -64,8 +64,6 @@
         });
         console.log(item);
         this.setSongList(item);
-
-
       },
       ...mapMutations([
         'setSongList'

@@ -10,7 +10,7 @@
       </div>
       <div class="userInfo" v-if="isLogin">
         <div class="avatar">
-          <img :src="profile.avatarUrl">
+          <img v-lazy="profile.avatarUrl">
         </div>
         <div class="content">
           <span class="username">{{profile.nickname}}<i class="icon iconfont icon-vip"></i></span>
@@ -53,13 +53,13 @@
           <transition name="fade">
             <div class="content-wrapper" v-show="createdPlayShow" ref="createdPlayWrapper">
               <ul>
-                <li class="item" v-for="item in createdPlaylist">
+                <li class="item" v-for="item in createdPlaylist" @click="selectedList(item)">
                   <div class="cover">
                     <img v-lazy="item.coverImgUrl">
                   </div>
                   <div class="content">
                     <h2 class="subtitle">{{item.name}}</h2>
-                    <span class="count">87首</span>
+                    <span class="count">211首</span>
                   </div>
                 </li>
               </ul>
@@ -75,7 +75,7 @@
           <transition name="fade">
             <div class="content-wrapper" v-show="subPlaylistShow" ref="subPlaylistWrapper">
               <ul>
-                <li class="item" v-for="item in subPlaylist">
+                <li class="item" v-for="item in subPlaylist" @click="selectedList(item)">
                   <div class="cover">
                     <img v-lazy="item.coverImgUrl">
                   </div>
@@ -101,8 +101,7 @@
   import BScroll from 'better-scroll'
 
   import store from "../../store/store.js";
-  import {mapGetters} from 'vuex';
-
+  import {mapGetters,mapMutations} from 'vuex';
 
   export default {
     name: "mine",
@@ -154,15 +153,16 @@
     },
     methods: {
 
-      _initData() {
-        let userId = this.account.id;
-        let url = `http://localhost:3000/user/playlist?uid=${userId}`;
-        this.$axios.get(url).then((res) => {
-          let list = res.data.playlist;
-          this._normalizeData(list, userId);
-        })
+      selectedList(item) {
+        this.$router.push({
+          path: `/mine/${item.id}`
+        });
+        console.log(item);
+        this.setSongList(item);
       },
-
+      ...mapMutations([
+        'setSongList'
+      ]),
 
       toggle1() {
         if (!this.createdPlaylist.length) {
@@ -183,6 +183,16 @@
           path: '/login'
         })
       },
+
+      _initData() {
+        let userId = this.account.id;
+        let url = `http://localhost:3000/user/playlist?uid=${userId}`;
+        this.$axios.get(url).then((res) => {
+          let list = res.data.playlist;
+          this._normalizeData(list, userId);
+        })
+      },
+
       _normalizeData(list, userid) {
         for (let i = 0; i < list.length; i++) {
           let item = list[i];
@@ -211,7 +221,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      height: 160px;
+      height: 220px;
       justify-content: center;
       font-size: 24px;
       border-bottom: 1px solid #ddd;

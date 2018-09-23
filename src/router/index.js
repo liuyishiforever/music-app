@@ -4,7 +4,8 @@ import recommend from '@/page/recommend/recommend'
 import mine from '@/page/mine/mine'
 import rank from '@/page/rank/rank'
 import login from '@/page/login/login'
-import listDetail from '@/page/list-detail/list-detail'
+import mineList from '@/page/mine/list-detail/list-detail'
+import recommendList from '@/page/mine/list-detail/list-detail'
 
 Vue.use(Router)
 
@@ -25,7 +26,7 @@ export default new Router({
       children: [
         {
           path: ':id',
-          component: listDetail
+          component: recommendList
         }
       ]
 
@@ -37,7 +38,12 @@ export default new Router({
         {
           path: '/login',
           component: login
+        },
+        {
+          path: ':id',
+          component: mineList
         }
+
       ]
     },
     {

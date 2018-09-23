@@ -1,9 +1,37 @@
 <template>
   <div class="login">
+
+    <div class="logo">
+      <img src="../../common/image/default.png">
+    </div>
     <div class="login-main">
       <input type="text" placeholder="账号" v-model="username">
       <input type="password" placeholder="密码" v-model="password">
-      <Button ref='btn' type="success" class="loginbtn" @click="goLogin" long :disabled="disabled">SUBMIT</Button>
+      <Button class="loginbtn" @click="goLogin" long :disabled="disabled">登录</Button>
+    </div>
+    <div class="try" @click="goIndex"><span>游客试用</span></div>
+    <div class="login-type">
+      <div class="title">其他登录方式</div>
+      <div class="type">
+        <div class="type-content">
+          <div class="type-item wechat">
+            <div class="type-icon"><i class="icon iconfont icon-WeChat"></i></div>
+            <div class="text">微信</div>
+          </div>
+          <div class="type-item qq">
+            <div class="type-icon"><i class="icon iconfont icon-QQ"></i></div>
+            <div class="text">QQ</div>
+          </div>
+          <div class="type-item weibo">
+            <div class="type-icon"><i class="icon iconfont icon-Weibo"></i></div>
+            <div class="text">微博</div>
+          </div>
+          <div class="type-item ntes">
+            <div class="type-icon"><i class="icon iconfont icon-NTES"></i></div>
+            <div class="text">网易</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -28,6 +56,9 @@
       }
     },
     methods: {
+      goIndex() {
+        this.$router.push({path: '/'})
+      },
       goLogin() {
         if (!(this.username || this.password)) {
           return;
@@ -70,14 +101,24 @@
     bottom: 0;
     right: 0;
     background: #fff;
+    .logo {
+      width: 400px;
+      height: 400px;
+      margin: 40px auto;
+      img {
+        width: 400px;
+        height: 400px;
+        border-radius: 50%;
+      }
+    }
     .login-main {
       width: 80%;
       margin: 100px auto;
-      height: 400px;
       line-height: 80px;
       input {
         width: 100%;
         height: 60px;
+        border: 2px solid #ccc;
         border-radius: 8px;
         text-indent: 24px;
         &::-webkit-input-placeholder {
@@ -85,12 +126,76 @@
         }
         &:focus {
           outline: none;
-          border: 1px solid red;
+          border: 2px solid red;
         }
       }
       .loginbtn {
         line-height: 32px;
         font-size: 28px;
+        background-color: #C92027;
+        color: #fff;
+      }
+    }
+    .try {
+      width: 80%;
+      margin: 20px auto;
+      text-align: center;
+      font-size: 26px;
+    }
+    .login-type {
+      display: flex;
+      width: 80%;
+      margin: 400px auto;
+      text-align: center;
+      flex-direction: column;
+      justify-content: center;
+      .title {
+        height: 80px;
+        line-height: 80px;
+        font-size: 28px;
+      }
+      .type {
+        .type-content {
+          display: flex;
+          justify-content: center;
+          .type-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .type-icon {
+              line-height: 80px;
+              width: 80px;
+              height:80px;
+              border: 2px solid #ccc;
+              border-radius: 50%;
+              text-align: center;
+              .icon {
+                font-size: 60px;
+                &.icon-WeChat {
+                  color: #00AC00;
+                }
+                &.icon-QQ {
+                  color: #007DFF;
+                }
+                &.icon-Weibo {
+                  color: #F80000;
+                }
+                &.icon-NTES {
+                  color: #F30000;
+                }
+              }
+            }
+            .text {
+              height: 80px;
+              line-height: 80px;
+              font-size: 24px;
+            }
+          }
+        }
+
+
+
       }
     }
   }

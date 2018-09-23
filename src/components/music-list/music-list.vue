@@ -4,10 +4,11 @@
       <div class="header-img">
         <img :src="songs.coverImgUrl">
         <div class="play-count"><i class="icon iconfont icon-headset"></i>{{songs.playCount|unitConvert}}</div>
+        <div class="detail-btn"><i class="icon iconfont icon-detail"></i></div>
       </div>
       <div class="header-content">
         <div class="name">{{songs.name}}</div>
-        <div class="tags">
+        <div class="tags" v-show="songs.tags">
           <span>标签: </span><span class="tag" v-for="tag in songs.tags">{{tag}}</span>
         </div>
         <div class="subname" v-if="songs.subscribers && songs.subscribers.length > 0">
@@ -29,18 +30,20 @@
       </div>
       <div class="songList-wrapper" ref="listWrapper">
         <ul class="songlist">
-          <li class="song-item" v-for="(item, index) in detail">
-            <div class="line-number">
-              <span>{{index+1}}</span>
-            </div>
-            <div class="item-content">
-              <div class="songname">{{item.name}}</div>
-              <div class="songer">{{item.ar[0].name}} - {{item.al.name}}</div>
-            </div>
-            <div class="tool">
-              <i class="icon iconfont icon-tool"></i>
-            </div>
-          </li>
+          <transition-group name="list-complete">
+            <li class="song-item" v-for="(item, index) in detail" :key="index">
+              <div class="line-number">
+                <span>{{index+1}}</span>
+              </div>
+              <div class="item-content">
+                <div class="songname">{{item.name}}</div>
+                <div class="songer">{{item.ar[0].name}} - {{item.al.name}}</div>
+              </div>
+              <div class="tool">
+                <i class="icon iconfont icon-tool"></i>
+              </div>
+            </li>
+          </transition-group>
         </ul>
 
       </div>
@@ -148,6 +151,17 @@
             margin-right: 8px;
           }
         }
+        .detail-btn {
+          position: absolute;
+          bottom: 0 ;
+          right:42px;
+          color: #fff;
+          .icon-detail {
+            font-size: 36px;
+            font-weight: bold;
+
+          }
+        }
       }
       .header-content {
         flex: 1;
@@ -167,7 +181,7 @@
           height: 26px;
           .tag {
             padding: 0 12px;
-            border: 1px solid #fff;
+            border: 2px solid #fff;
             border-radius: 8px;
             margin-left: 12px;
           }
@@ -186,7 +200,7 @@
       .icon-close {
         position: absolute;
         top: 0;
-        right: 32px;
+        right: 16px;
         padding: 20px;
         color: #fff;
         font-size: 32px;
@@ -251,6 +265,13 @@
           background: #fff;
           .song-item {
             display: flex;
+            &.list-complete-enter-active, &.list-complete-leave-active {
+              transition: all 0.2s linear;
+            }
+            &.list-complete-enter, &.list-complete-leave-to {
+              opacity: 0;
+              transform: translateY(30px);
+            }
             .line-number {
               flex: 0 0 80px;
               width: 80px;
