@@ -1,5 +1,5 @@
 <template>
-  <div class="recommend" ref="recommend">
+  <div class="recommend">
     <div class="banner">
       <Carousel autoplay v-model="carouselModel" loop :autoplay="true" arrow="never">
         <CarouselItem v-for="banner in banners" :key="banner.url">
@@ -13,17 +13,17 @@
     <div class="wrapper" ref="wrapper">
       <div class="content">
         <list-view title="推荐歌单" :showPlayCount="true" :showSinger="false" :limit="6"
-                   :resource="recommendList"></list-view>
+                   :resource="recommendList" @select="selectedList"></list-view>
         <list-view title="最新音乐" :showPlayCount="false" :showSinger="true" :limit="6"
-                   :resource="newList"></list-view>
+                   :resource="newList" @select="selectedList"></list-view>
         <list-view title="主播电台" :showPlayCount="false" :showSinger="true" :limit="6"
-                   :resource="djrecommend"></list-view>
-
+                   :resource="djrecommend" @select="selectedList"></list-view>
       </div>
-
     </div>
+    <router-view></router-view>
 
   </div>
+
 </template>
 
 <script>
@@ -32,9 +32,12 @@
   import nav from '../../components/nav/nav'
   import listView from '../../components/listview/listview'
   import BScroll from 'better-scroll'
+  import {mapMutations} from 'vuex'
+  import store from "../../store/store.js";
 
   export default {
     name: "recommend",
+    store,
     data() {
       return {
         banners: [],
@@ -55,6 +58,20 @@
           this.scroll.refresh();
         }
       },
+      selectedList(item) {
+        this.$router.push({
+          path: `/recommend/${item.id}`
+        });
+        console.log(item);
+        this.setSongList(item);
+
+
+      },
+      ...mapMutations([
+        'setSongList'
+      ])
+
+
     },
     created() {
       this.recommendList = 'http://localhost:3000/top/playlist/highquality';
@@ -93,7 +110,7 @@
     }
     .wrapper {
       position: absolute;
-      top: 500px;
+      top: 520px;
       bottom: 0;
       left: 0;
       width: 100%;

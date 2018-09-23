@@ -11,9 +11,14 @@ const state = {
   isLogin: false,
   account: null,
   profile: null,
+  songList: null,
 };
 
 const getters = {
+  songList: function (state) {
+    return state.songList;
+  },
+
   isLogin: function (state) {
     let temp = state.isLogin;
     if (!state.isLogin) {
@@ -24,9 +29,6 @@ const getters = {
   profile: function (state) {
     let temp = state.profile;
     if (!state.profile) {
-      // state.profile = JSON.parse(localStorage.getItem('key'));
-      // state.profile = Object.assign({},JSON.parse(localStorage.getItem('key')));
-
       temp = JSON.parse(localStorage.getItem('profile'));
     }
     return temp;
@@ -37,16 +39,17 @@ const getters = {
       temp = JSON.parse(localStorage.getItem('account'))
     }
     return temp;
-
   }
 };
 
 const mutations = {
+  setSongList(state, item) {
+    state.songList = item;
+  },
   setIsLogin(state, boolean) {
     state.isLogin = boolean;
     localStorage.setItem('isLogin', boolean);
   },
-
   setProfile(state, value) {
     state.profile = value;
     localStorage.setItem('profile', JSON.stringify(value))

@@ -13,8 +13,12 @@
           <img :src="profile.avatarUrl">
         </div>
         <div class="content">
-          <span class="username">{{profile.nickname}}</span>
-          <span class="level">Lv.99</span>
+          <span class="username">{{profile.nickname}}<i class="icon iconfont icon-vip"></i></span>
+
+          <span class="level">
+
+            <span class="lv">lv.99</span>
+          </span>
         </div>
       </div>
       <ul class="list">
@@ -51,7 +55,7 @@
               <ul>
                 <li class="item" v-for="item in createdPlaylist">
                   <div class="cover">
-                    <img :src="item.coverImgUrl">
+                    <img v-lazy="item.coverImgUrl">
                   </div>
                   <div class="content">
                     <h2 class="subtitle">{{item.name}}</h2>
@@ -73,7 +77,7 @@
               <ul>
                 <li class="item" v-for="item in subPlaylist">
                   <div class="cover">
-                    <img :src="item.coverImgUrl">
+                    <img v-lazy="item.coverImgUrl">
                   </div>
                   <div class="content">
                     <h2 class="subtitle">{{item.name}}</h2>
@@ -248,11 +252,22 @@
           font-size: 26px;
           font-weight: bold;
           color: #fff;
-
+          .icon-vip {
+            font-size: 26px;
+            color: #fff;
+          }
         }
+
         .level {
           font-size: 22px;
           color: #ddd;
+          font-weight: bold;
+          .lv {
+            padding: 0 12px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-weight: bold;
+          }
         }
       }
 

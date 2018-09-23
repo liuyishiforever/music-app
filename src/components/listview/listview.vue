@@ -4,16 +4,17 @@
       <span class="text">{{title}}</span><i class="icon iconfont icon-more"></i>
     </div>
     <ul class="playlists">
-      <li class="item" v-for="item in playlists">
+      <li class="item" v-for="item in playlists" @click="selectItem(item)">
         <div class="cover">
           <img class="cover-img" v-if="item.coverImgUrl" v-lazy="item.coverImgUrl">
           <img class="cover-img" v-if="item.picUrl" v-lazy="item.picUrl">
-          <div class="count" v-show="item.playCount && showPlayCount" >
+          <div class="count" v-show="item.playCount && showPlayCount">
             <i class="icon iconfont icon-headset"></i>
             <span class="playCount">{{item.playCount | unitConvert}}</span>
           </div>
         </div>
-        <span class="nickname" v-if="item.creator && item.creator.nickname && showSinger">{{item.creator.nickname}}</span>
+        <span class="nickname"
+              v-if="item.creator && item.creator.nickname && showSinger">{{item.creator.nickname}}</span>
         <span class="name">{{item.name}}</span>
       </li>
     </ul>
@@ -22,6 +23,7 @@
 </template>
 
 <script>
+
   import {unitConvert} from 'common/js/unitConvert'
 
   export default {
@@ -52,7 +54,7 @@
     },
     created() {
       let url = '';
-      if (this.resource.indexOf("?") >= 0 ) {
+      if (this.resource.indexOf("?") >= 0) {
         url = `${this.resource}&limit=${this.limit}`;
       } else {
         url = `${this.resource}?limit=${this.limit}`;
@@ -60,11 +62,15 @@
       this.$axios.get(url).then((res) => {
         if (res.data.playlists) {
           this.playlists = res.data.playlists;
-        } else if(res.data.result) {
+        } else if (res.data.result) {
           this.playlists = res.data.result;
         }
-
       })
+    },
+    methods: {
+      selectItem(item) {
+        this.$emit('select', item);
+      }
     },
     filters: {
       unitConvert(num) {
