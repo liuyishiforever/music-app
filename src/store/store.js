@@ -39,6 +39,7 @@ const getters = {
       temp = JSON.parse(localStorage.getItem('account'))
     }
     return temp;
+
   }
 };
 

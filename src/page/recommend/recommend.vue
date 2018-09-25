@@ -1,5 +1,5 @@
 <template>
-  <div class="recommend">
+  <div class="recommend" ref="recommend">
     <div class="banner">
       <Carousel autoplay v-model="carouselModel" loop :autoplay="true" arrow="never">
         <CarouselItem v-for="banner in banners" :key="banner.url">
@@ -14,7 +14,7 @@
       <div class="content">
         <list-view title="推荐歌单" :showPlayCount="true" :showSinger="false" :limit="6"
                    :resource="recommendList" @select="selectedList"></list-view>
-        <list-view title="最新音乐" :showPlayCount="false" :showSinger="true" :limit="6"
+        <list-view title="最In音乐" :showPlayCount="false" :showSinger="true" :limit="6"
                    :resource="newList" @select="selectedList"></list-view>
         <list-view title="主播电台" :showPlayCount="false" :showSinger="true" :limit="6"
                    :resource="djrecommend" @select="selectedList"></list-view>
@@ -49,9 +49,21 @@
         this.scroll = new BScroll(this.$refs.wrapper, {
           click: true
         })
-      }, 20)
+      }, 20);
+
+      this.handlePlaylist();
+
     },
     methods: {
+      handlePlaylist() {
+        let bottom = '120px';
+        this.$refs.recommend.style.bottom = bottom;
+        if (this.scroll) {
+          this.scroll.refresh();
+        }
+
+      },
+
       loadImage() {
         if (!this.checkloaded) {
           this.checkloaded = true;
@@ -73,7 +85,7 @@
     },
     created() {
       this.recommendList = 'http://localhost:3000/top/playlist/highquality';
-      this.newList = 'http://localhost:3000/top/playlist?order=new';
+      this.newList = 'http://localhost:3000/top/playlist?order=hot';
       this.djrecommend = 'http://localhost:3000/personalized/djprogram';
 
       let url = 'http://localhost:3000/banner';

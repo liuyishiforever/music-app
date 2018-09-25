@@ -130,10 +130,14 @@
         }
       }
       .loginbtn {
-        line-height: 32px;
-        font-size: 28px;
+        line-height: 48px;
         background-color: #C92027;
+        border-radius: 8px;
         color: #fff;
+        span {
+          font-size: 28px;
+          font-weight: bold;
+        }
       }
     }
     .try {

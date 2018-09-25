@@ -4,6 +4,7 @@ import recommend from '@/page/recommend/recommend'
 import mine from '@/page/mine/mine'
 import rank from '@/page/rank/rank'
 import login from '@/page/login/login'
+import search from '@/page/search/search'
 import mineList from '@/page/mine/list-detail/list-detail'
 import recommendList from '@/page/mine/list-detail/list-detail'
 
@@ -49,6 +50,10 @@ export default new Router({
     {
       path: '/rank',
       component: rank
+    },
+    {
+      path: '/search',
+      component: search
     }
   ],
   linkActiveClass: 'active',

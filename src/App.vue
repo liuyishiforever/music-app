@@ -6,12 +6,14 @@
         <router-view class="view"/>
       </keep-alive>
     </transition>
+    <player></player>
 
   </div>
 </template>
 
 <script>
-  import tab from '@/components/tab/tab'
+  import Tab from '@/components/tab/tab'
+  import Player from '@/components/player/player'
 
   export default {
     name: 'App',
@@ -21,7 +23,8 @@
       }
     },
     components: {
-      tab
+      Tab,
+      Player
     },
     beforeRouteUpdate(to, from, next) {
       // 如果isBack为true时，证明是用户点击了回退，执行slide-right动画

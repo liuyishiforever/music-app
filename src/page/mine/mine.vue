@@ -14,10 +14,8 @@
         </div>
         <div class="content">
           <span class="username">{{profile.nickname}}<i class="icon iconfont icon-vip"></i></span>
-
           <span class="level">
-
-            <span class="lv">lv.99</span>
+            <span class="lv">LV.99</span>
           </span>
         </div>
       </div>
@@ -101,7 +99,7 @@
   import BScroll from 'better-scroll'
 
   import store from "../../store/store.js";
-  import {mapGetters,mapMutations} from 'vuex';
+  import {mapGetters, mapMutations} from 'vuex';
 
   export default {
     name: "mine",
