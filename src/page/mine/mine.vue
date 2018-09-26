@@ -98,12 +98,10 @@
 
   import BScroll from 'better-scroll'
 
-  import store from "../../store/store.js";
   import {mapGetters, mapMutations} from 'vuex';
 
   export default {
     name: "mine",
-    store,
     data() {
       return {
         createdPlaylist: [],
@@ -144,7 +142,7 @@
       ...mapGetters([
         'isLogin',
         'profile',
-        'account'
+        'account',
       ])
 
 

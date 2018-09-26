@@ -9,6 +9,7 @@ import VueLazyload from 'vue-lazyload'
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 import axios from 'axios'
+import store from './store/store'
 
 
 
@@ -31,6 +32,7 @@ Vue.config.productionTip = false;
 new Vue({
   el: '#app',
   router,
+  store,
   components: {App},
   template: '<App/>'
 })

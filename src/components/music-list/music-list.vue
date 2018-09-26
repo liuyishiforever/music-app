@@ -31,7 +31,7 @@
       <div class="songList-wrapper" ref="listWrapper">
         <ul class="songlist">
           <transition-group name="list-complete">
-            <li class="song-item" v-for="(item, index) in detail" :key="index">
+            <li class="song-item" v-for="(item, index) in detail" :key="index" @click="selectItem(item, index, $event)">
               <div class="line-number">
                 <span>{{index+1}}</span>
               </div>
@@ -58,6 +58,7 @@
   import {unitConvert} from 'common/js/unitConvert'
   import {timestampToTime} from 'common/js/date'
   import BSCroll from 'better-scroll'
+  import {mapGetters, mapActions} from 'vuex'
 
 
   export default {
@@ -76,6 +77,13 @@
         subscribedCount: ''
       }
     },
+    computed: {
+      ...mapGetters([
+        'currentIndex',
+        'playing',
+        'fullScreen'
+      ])
+    },
     created() {
       if (this.id) {
         let url = `http://localhost:3000/playlist/detail?id=${this.id}`;
@@ -92,10 +100,21 @@
       }
     },
     methods: {
+      selectItem(item, index, event) {
+        if (!event._constructed) {
+          return;
+        }
+        this.selectPlay({
+          list: this.detail,
+          index
+        })
+      },
       back() {
-        console.log("back")
         this.$router.back(-1);
-      }
+      },
+      ...mapActions([
+        'selectPlay'
+      ])
     },
     filters: {
       timestampToTime(timestamp) {
@@ -104,7 +123,6 @@
       unitConvert(num) {
         return unitConvert(num);
       }
-
     }
   }
 </script>
@@ -153,8 +171,8 @@
         }
         .detail-btn {
           position: absolute;
-          bottom: 0 ;
-          right:42px;
+          bottom: 0;
+          right: 42px;
           color: #fff;
           .icon-detail {
             font-size: 36px;

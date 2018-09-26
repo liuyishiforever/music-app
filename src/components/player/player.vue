@@ -1,5 +1,5 @@
 <template>
-  <div class="player">
+  <div class="player" v-if="playList.length">
     <div class="normal-player" v-show="fullScreen">
       <div class="background">
         <img width="100%" height="100%" v-if="currentSong.al" :src="currentSong.al.picUrl">
@@ -14,7 +14,7 @@
       <div class="middle">
         <div class="middle-l">
           <div class="cd-wrapper">
-            <div class="cd">
+            <div class="cd" :class="cdCls">
               <img class="image" v-if="currentSong.al" :src="currentSong.al.picUrl">
             </div>
           </div>
@@ -76,8 +76,8 @@
       </div>
     </div>
     <div class="mini-player" v-show="!fullScreen" @click="open">
-      <div class="icon">
-        <img v-if="currentSong.al" :src="currentSong.al.picUrl" alt="">
+      <div class="icon" >
+        <img :class="cdCls" v-if="currentSong.al" :src="currentSong.al.picUrl">
       </div>
       <div class="text">
         <h2 class="name">{{currentSong.name}}</h2>
@@ -91,37 +91,62 @@
       </div>
 
     </div>
-    <audio ref="audio" src="http://m10.music.126.net/20180925192313/34e7784a8310a27f402e230e6de18ad2/ymusic/8af2/e130/063a/aebb396665cc36bad70eb508c2788121.mp3" preload controls loop></audio>
+    <audio ref="audio" :src="currentSongUrl" preload loop autoplay></audio>
 
   </div>
 </template>
 
 <script>
+
+  import {mapGetters, mapMutations, mapActions} from 'vuex'
+
   export default {
     data() {
       return {
-        fullScreen: true,
         currentSongUrl: '',
-        currentSong: {}
+
+      }
+    },
+    computed: {
+      cdCls() {
+        return this.playing ? 'play' : 'pause'
+      },
+
+      ...mapGetters([
+        'playList',
+        'fullScreen',
+        'playing',
+        'currentSong'
+      ])
+    },
+    watch: {
+      currentSong(val) {
+        this.getCurrentSongUrl(val);
       }
     },
     methods: {
       back() {
-        this.fullScreen = false;
+        this.setFullScreen(false);
       },
       open() {
-        this.fullScreen = true;
-      }
+        this.setFullScreen(true);
+      },
+      getCurrentSongUrl(song) {
+        let id = song.id;
+        let url = `http://localhost:3000/music/url?id=${id}`;
+        this.$axios.get(url).then((res) => {
+          this.currentSongUrl = res.data.data[0].url;
+        });
+      },
+      ...mapMutations([
+        'setFullScreen'
+      ])
+
+
     },
     created() {
-      let url = 'http://localhost:3000/music/url?id=30612793';
-      this.$axios.get(url).then((res) => {
-        this.currentSongUrl = res.data.url;
-      });
-      this.$axios.get('https://api.myjson.com/bins/15r9p0').then((res) => {
-        this.currentSong = res.data;
-      })
-    }
+    },
+
   }
 </script>
 
@@ -202,6 +227,12 @@
               width: 100%;
               height: 100%;
               border-radius: 50%;
+              &.play {
+                animation: rotate 20s linear infinite;
+              }
+              &.pause {
+                animation-play-state: paused;
+              }
               img {
                 position: absolute;
                 left: 0;
@@ -321,6 +352,13 @@
           width: 80px;
           height: 80px;
           border-radius: 50%;
+          &.play {
+            animation: rotate 10s linear infinite;
+          }
+          &.pause {
+            animation-play-state: paused
+          }
+
         }
       }
       .text {
@@ -349,12 +387,19 @@
         }
         .icon-play-list {
           font-size: 60px;
-
         }
       }
-
     }
-
   }
+
+  @keyframes rotate {
+    0% {
+      transform: rotate(0)
+    }
+    100% {
+      transform: rotate(360deg)
+    }
+  }
+
 
 </style>

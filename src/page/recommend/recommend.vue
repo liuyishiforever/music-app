@@ -32,7 +32,7 @@
   import nav from '../../components/nav/nav'
   import listView from '../../components/listview/listview'
   import BScroll from 'better-scroll'
-  import {mapMutations} from 'vuex'
+  import {mapGetters, mapMutations} from 'vuex'
   import store from "../../store/store.js";
 
   export default {
@@ -44,24 +44,34 @@
         carouselModel: 2,
       }
     },
+    computed: {
+      ...mapGetters([
+        'playList'
+      ])
+    },
     mounted() {
       setTimeout(() => {
         this.scroll = new BScroll(this.$refs.wrapper, {
           click: true
         })
       }, 20);
-
-      this.handlePlaylist();
-
+      this.handlePlaylist(this.playList);
+    },
+    activated() {
+      this.handlePlaylist(this.playList);
+    },
+    watch: {
+      playList(newVal) {
+        this.handlePlaylist(newVal);
+      }
     },
     methods: {
-      handlePlaylist() {
-        let bottom = '120px';
+      handlePlaylist(playlist) {
+        const bottom = playlist.length > 0 ? '120px' : '';
         this.$refs.recommend.style.bottom = bottom;
         if (this.scroll) {
           this.scroll.refresh();
         }
-
       },
 
       loadImage() {

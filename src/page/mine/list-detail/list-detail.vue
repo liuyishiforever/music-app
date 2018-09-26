@@ -5,7 +5,8 @@
 </template>
 
 <script>
-  import {mapGetters} from 'vuex';
+
+  import {mapGetters} from 'vuex'
   import musicList from '../../../components/music-list/music-list'
 
   export default {
@@ -17,8 +18,10 @@
     },
     created() {
       this._getSongList();
+
     },
     methods: {
+
       _getSongList() {
         if (!this.songList || !this.songList.id) {
           this.$router.push('/mine');
