@@ -1,4 +1,4 @@
-# music-app
+# music* app
 
 ## Foreword
 
@@ -28,45 +28,46 @@ npm run dev
 npm run build
 
 # build for production and view the bundle analyzer report
-npm run build --report
+npm run build * * report
 ```
 ## Technology Stack
-1. Vuejs - The Progressive JavaScript Framework
-2. axios - Promise based HTTP client for the browser and node.js
-3. Vuex - Vuex is a state management pattern + library for Vue.js applications. 
-4. scss - Syntactically Awesome Style Sheets
-5. flexible - Alibaba Mobile adaptation scheme
-6. px2remLoader - Change 'px' to 'rem'
-7. better-scroll - It's a plugin which is aimed at solving scrolling circumstances on the mobile side
-8. Vue-Lazyload: Vue module for lazyloading images in applications
-9. iconfont - 阿里巴巴矢量图标库
+1. Vuejs *  The Progressive JavaScript Framework
+2. axios *  Promise based HTTP client for the browser and node.js
+3. Vuex *  Vuex is a state management pattern + library for Vue.js applications. 
+4. scss *  Syntactically Awesome Style Sheets
+5. flexible *  Alibaba Mobile adaptation scheme
+6. px2remLoader *  Change 'px' to 'rem'
+7. better* scroll *  It's a plugin which is aimed at solving scrolling circumstances on the mobile side
+8. Vue* Lazyload: Vue module for lazyloading images in applications
+9. iconfont *  阿里巴巴矢量图标库
 
-## 预计完成的功能
--[x] 首页歌单推荐
+## Roadmap
 
--[x] 歌单详情
+* [x] 首页歌单推荐
 
--[x] 播放器 50%
+* [x] 歌单详情
 
--[x] 播放暂停
+* [x] 播放器 50%
 
--[x] 播放模式切歌（顺序和随机）
+* [x] 播放暂停
 
--[ ] 歌词滚动（待修改）
+* [x] 播放模式切歌（顺序和随机）
 
--[ ] 歌曲拖动
+* [ ] 歌词滚动（待修改）
 
--[x] 播放底栏
+* [ ] 歌曲拖动
 
--[ ] 底栏歌词同步
+* [x] 播放底栏
 
--[x] 播放列表
+* [ ] 底栏歌词同步
 
--[ ] 歌曲评论
+* [x] 播放列表
 
--[ ] 搜索推荐
+* [ ] 歌曲评论
 
--[ ] 搜索分类
+* [ ] 搜索推荐
+
+* [ ] 搜索分类
 
 
 ## Project Preview
