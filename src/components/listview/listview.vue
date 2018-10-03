@@ -25,7 +25,6 @@
 <script>
 
   import {unitConvert} from 'common/js/unitConvert'
-
   export default {
     name: "listview",
     props: {

@@ -19,7 +19,11 @@
             </div>
           </div>
           <div class="playing-lyric-wrapper">
-            <div class="playing-lyric"></div>
+            <div v-if="currentLyric" class="playing-lyric">
+              <p ref="lyricLine"
+                 class="text"
+                 v-for="(line,index) in currentLyric.lines" v-if="index === currentLineNum">{{line.txt}}</p>
+            </div>
           </div>
         </div>
         <div class="middle-r">
@@ -62,8 +66,8 @@
           <div class="icon i-left">
             <i class="icon iconfont icon-prev"></i>
           </div>
-          <div class="icon i-center">
-            <i class="icon iconfont icon-play"></i>
+          <div class="icon i-center" @click="togglePlaying">
+            <i class="icon iconfont icon-play" :class="playIcon"></i>
           </div>
           <div class="icon i-right">
             <i class="icon iconfont icon-next"></i>
@@ -76,20 +80,19 @@
       </div>
     </div>
     <div class="mini-player" v-show="!fullScreen" @click="open">
-      <div class="icon" >
+      <div class="icon">
         <img :class="cdCls" v-if="currentSong.al" :src="currentSong.al.picUrl">
       </div>
       <div class="text">
         <h2 class="name">{{currentSong.name}}</h2>
         <p class="desc" v-if="currentSong.ar && currentSong.ar.length>0">{{currentSong.ar[0].name}}</p>
       </div>
-      <div class="control">
-        <i class="icon iconfont icon-play"></i>
+      <div class="control" @click.stop.prevent="togglePlaying">
+        <i class="icon iconfont playIcon" :class="playIcon"></i>
       </div>
       <div class="control">
         <i class="icon iconfont icon-play-list"></i>
       </div>
-
     </div>
     <audio ref="audio" :src="currentSongUrl" preload loop autoplay></audio>
 
@@ -99,12 +102,18 @@
 <script>
 
   import {mapGetters, mapMutations, mapActions} from 'vuex'
+  import Playlist from '../../components/playlist/playlist'
+  import Lyric from 'lyric-parser';
+  import BScroll from 'better-scroll'
 
   export default {
     data() {
       return {
         currentSongUrl: '',
-
+        lyric: '',
+        currentLyric: null,
+        currentLineNum: 0,
+        playingLyric: ''
       }
     },
     computed: {
@@ -112,19 +121,47 @@
         return this.playing ? 'play' : 'pause'
       },
 
+      playIcon() {
+        return this.playing ? 'icon-play' : 'icon-pause'
+      },
+
       ...mapGetters([
         'playList',
         'fullScreen',
         'playing',
-        'currentSong'
+        'currentSong',
       ])
     },
     watch: {
+      playing(newPlaying) {
+        const audio = this.$refs.audio;
+        if (audio) {
+          this.$nextTick(() => {
+            newPlaying ? audio.play() : audio.pause();
+          })
+        }
+      },
+
       currentSong(val) {
         this.getCurrentSongUrl(val);
+        document.title = '🎶️' + val.name;
+        if (val == null && !playing) {
+          document.title = 'music-app';
+        }
+        clearTimeout(this.timer);
+        this.timer = setTimeout(() => {
+          this.$refs.audio.play();
+          this.getLyric(val);
+        }, 200)
+
       }
     },
     methods: {
+
+      togglePlaying() {
+        this.setPlaying(!this.playing);
+      },
+
       back() {
         this.setFullScreen(false);
       },
@@ -138,14 +175,39 @@
           this.currentSongUrl = res.data.data[0].url;
         });
       },
+
+      getLyric(song) {
+        // 获取歌词
+        let id = song.id;
+        this.$axios.get(`http://localhost:3000/lyric?id=${id}`).then((res) => {
+          if (res.data.nolyric) {
+            this.playingLyric = '纯音乐, 无歌词';
+            return;
+          }
+          this.playingLyric = res.data.lrc.lyric;
+          this.currentLyric = new Lyric(res.data.lrc.lyric, this.handleLyric);
+          console.log(this.currentLyric);
+          if (this.playing) {
+            this.currentLyric.play();
+          }
+        })
+      },
+      handleLyric({lineNum, text}) {
+        this.currentLineNum = lineNum;
+        this.playingLyric = text;
+      },
       ...mapMutations([
-        'setFullScreen'
+        'setFullScreen',
+        'setPlaying'
       ])
 
 
     },
     created() {
     },
+    components: {
+      Playlist
+    }
 
   }
 </script>
@@ -183,7 +245,6 @@
             display: block;
             padding: 12px;
             font-size: 36px;
-            color: #000;
           }
         }
         .title {
@@ -192,12 +253,15 @@
           line-height: 60px;
           text-align: center;
           font-size: 28px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
         .subtitle {
-          line-height: 26px;
+          line-height: 42px;
           text-align: center;
           font-size: 26px;
-          color: #7e8c8d;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.2);
         }
 
       }
@@ -244,6 +308,18 @@
             }
 
           }
+          .playing-lyric-wrapper {
+            width: 80%;
+            margin: 30px auto 0 auto;
+            overflow: hidden;
+            text-align: center;
+            .playing-lyric {
+              height: 40px;
+              font-size: 24px;
+              color: #7e8c8d;
+            }
+          }
+
         }
         .middle-r {
           display: inline-block;
@@ -352,6 +428,7 @@
           width: 80px;
           height: 80px;
           border-radius: 50%;
+          border: 1px solid #ccc;
           &.play {
             animation: rotate 10s linear infinite;
           }
@@ -372,17 +449,23 @@
           margin-bottom: 4px;
           font-size: 24px;
           font-weight: bold;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
         .desc {
           font-size: 22px;
           color: #7e8c8d;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
       }
       .control {
         flex: 0 0 90px;
         width: 90px;
         text-align: center;
-        .icon-play {
+        .playIcon {
           font-size: 60px;
         }
         .icon-play-list {

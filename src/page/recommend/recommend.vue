@@ -46,7 +46,8 @@
     },
     computed: {
       ...mapGetters([
-        'playList'
+        'playList',
+        'isLogin'
       ])
     },
     mounted() {

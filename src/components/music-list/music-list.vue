@@ -303,13 +303,20 @@
             .item-content {
               flex: 1;
               border-bottom: 1px solid #eee;
+              width: 80%;
               .songname {
                 font-size: 28px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
 
               }
               .songer {
                 font-size: 22px;
                 color: #7e8c8d;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
 
               }
 
