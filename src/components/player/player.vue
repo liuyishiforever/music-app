@@ -376,7 +376,6 @@
               }
             }
           }
-
         }
         .operators {
           display: flex;
@@ -403,11 +402,8 @@
               font-size: 48px;
             }
           }
-
         }
-
       }
-
     }
     .mini-player {
       display: flex;
